@@ -10,7 +10,7 @@ Navigate to instruction source file
 ![ScreenShot](https://raw.githubusercontent.com/machak/essentials-intellij-plugin/master/screenshots/inspections.png)
 
 ### Installation
-![Download intellij-essentials.jar](https://raw.githubusercontent.com/machak/essentials-intellij-plugin/master/intellij-essentials.jar)
+[Download intellij-essentials.jar](https://raw.githubusercontent.com/machak/essentials-intellij-plugin/master/intellij-essentials.jar)
 
 Go to:
 ```
