@@ -26,6 +26,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.IncorrectOperationException;
@@ -37,6 +38,13 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
 
     private static final Logger log = Logger.getInstance("#org.onehippo.essentials.intellij.xml.intentions.CreateFileIntention");
 
+    @NotNull
+    @Override
+    public String getText() {
+        return "Create missing instruction file";
+    }
+
+
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
 
@@ -44,6 +52,7 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
 
 
     }
+
 
     @Override
     public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
@@ -53,12 +62,30 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
         }
 
         final PsiElement parent = element.getParent();
-        if (!(parent instanceof XmlAttribute)) {
+        final boolean isAttribute = parent instanceof XmlAttribute;
+        final boolean isValue = parent instanceof XmlAttributeValue;
+        if (!isAttribute && !isValue) {
             return false;
         }
-        final XmlAttribute attribute = (XmlAttribute) parent;
+        String ourValue = "";
+        XmlAttribute attribute;
+        if (isValue) {
+            ourValue = ((XmlAttributeValue) parent).getValue();
+            attribute = (XmlAttribute) parent.getParent();
+        } else {
+            attribute = (XmlAttribute) parent;
+            final XmlAttributeValue valueElement = attribute.getValueElement();
+            if (valueElement != null) {
+                ourValue = valueElement.getValue();
+            }
+        }
+        if (Strings.isNullOrEmpty(ourValue)) {
+            return false;
+        }
+
+        System.out.println("attribute = " + ourValue);
         final XmlTag ourParent = attribute.getParent();
-        if(ourParent==null){
+        if (ourParent == null) {
             return false;
         }
         final String tagName = ourParent.getLocalName();

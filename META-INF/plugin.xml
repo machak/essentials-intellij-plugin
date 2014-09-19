@@ -46,6 +46,20 @@
     <intentionAction>
       <className>org.onehippo.essentials.intellij.xml.intentions.CreateFileIntention</className>
     </intentionAction>
+    <!--
+      //############################################
+      // PROJECT SETUP
+      //############################################
+    -->
+    <internalFileTemplate name="essentials_pom"/>
+    <internalFileTemplate name="essentials_rest_class"/>
+    <internalFileTemplate name="essentials_web_fragment"/>
+    <internalFileTemplate name="essentials_javascript_template"/>
+    <internalFileTemplate name="essentials_html_templat"/>
+
+    <projectTemplatesFactory implementation="org.onehippo.essentials.intellij.factory.HippoProjectFactory"/>
+    <directoryProjectGenerator implementation="org.onehippo.essentials.intellij.project.HippoEssentialsProject"/>
+
   </extensions>
 
   <application-components>
