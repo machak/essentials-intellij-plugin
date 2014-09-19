@@ -56,7 +56,7 @@
     <internalFileTemplate name="essentials_rest_class"/>
     <internalFileTemplate name="essentials_web_fragment"/>
     <internalFileTemplate name="essentials_javascript_template"/>
-    <internalFileTemplate name="essentials_html_templat"/>
+    <internalFileTemplate name="essentials_html_template"/>
 
     <projectTemplatesFactory implementation="org.onehippo.essentials.intellij.factory.HippoProjectFactory"/>
     <directoryProjectGenerator implementation="org.onehippo.essentials.intellij.project.HippoEssentialsProject"/>
