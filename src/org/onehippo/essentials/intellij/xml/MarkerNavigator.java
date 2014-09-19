@@ -46,7 +46,7 @@ public class MarkerNavigator {
     }
 
     public static LineMarkerInfo<PsiElement> create(@NotNull PsiElement element, @NotNull final PsiElement[] targets, Icon icon, @Nullable final String[] tooltips) {
-        return new LineMarkerInfo<PsiElement>(element,
+        return new LineMarkerInfo<>(element,
                 element.getTextRange(),
                 icon,
                 Pass.UPDATE_ALL,

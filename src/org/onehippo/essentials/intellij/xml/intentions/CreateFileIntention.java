@@ -16,14 +16,26 @@
 
 package org.onehippo.essentials.intellij.xml.intentions;
 
+import java.io.File;
+
 import org.jetbrains.annotations.NotNull;
 import org.onehippo.essentials.intellij.xml.SourceLineMarker;
 
 import com.google.common.base.Strings;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
@@ -48,11 +60,80 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
 
-        log.error("project {}" + project);
+        final String fileName = getFileName(project, editor, element);
+        if (Strings.isNullOrEmpty(fileName)) {
+            return;
+        }
+        final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+        if (module == null) {
+            return;
+        }
+        VirtualFile ourResource = null;
+        final VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
+        for (VirtualFile sourceRoot : sourceRoots) {
+            ourResource = sourceRoot;
+            if (sourceRoot.getName().equals("resources")) {
+                ourResource = sourceRoot;
+                break;
+            }
 
+        }
 
+        if (ourResource == null) {
+            return;
+        }
+        final String filePath = ourResource.getCanonicalPath() + File.separator + fileName;
+
+        final Application application = ApplicationManager.getApplication();
+        application.runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    FileUtil.createIfDoesntExist(new File(filePath));
+                } finally {
+
+                    application.invokeLater(new Runnable() {@Override
+                        public void run() {
+                            final VirtualFile file = VirtualFileManager.getInstance().refreshAndFindFileByUrl("file://"+filePath);
+                            if (file != null) {
+                                final OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(project, file);
+                                FileEditorManager.getInstance(project).openTextEditor(openFileDescriptor, true);
+                            }
+
+                        }
+                    });
+                }
+
+            }
+        });
     }
 
+    private String getFileName(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
+        if (!(element instanceof XmlToken)) {
+            return null;
+        }
+
+        final PsiElement parent = element.getParent();
+        final boolean isAttribute = parent instanceof XmlAttribute;
+        final boolean isValue = parent instanceof XmlAttributeValue;
+        if (!isAttribute && !isValue) {
+            return null;
+        }
+        String ourValue = null;
+        XmlAttribute attribute;
+        if (isValue) {
+            ourValue = ((XmlAttributeValue) parent).getValue();
+            attribute = (XmlAttribute) parent.getParent();
+        } else {
+            attribute = (XmlAttribute) parent;
+            final XmlAttributeValue valueElement = attribute.getValueElement();
+            if (valueElement != null) {
+                ourValue = valueElement.getValue();
+            }
+        }
+        return ourValue;
+    }
 
     @Override
     public boolean isAvailable(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) {
@@ -83,7 +164,6 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
             return false;
         }
 
-        System.out.println("attribute = " + ourValue);
         final XmlTag ourParent = attribute.getParent();
         if (ourParent == null) {
             return false;
@@ -103,5 +183,10 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
     @Override
     public String getFamilyName() {
         return "XML";
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return false;
     }
 }
