@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.lang.Language;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -96,7 +97,7 @@ public class SourceLineMarker implements LineMarkerProvider {
         for (VirtualFile sourceRoot : sourceRoots) {
             final VirtualFile targetFile = sourceRoot.findFileByRelativePath(source);
             if (targetFile != null) {
-                PsiFile target = SelfElementInfo.restoreFileFromVirtual(targetFile, module.getProject());
+                PsiFile target = SelfElementInfo.restoreFileFromVirtual(targetFile, module.getProject(), Language.ANY);
                 return MarkerNavigator.create(element, new PsiElement[]{target}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
             }
 

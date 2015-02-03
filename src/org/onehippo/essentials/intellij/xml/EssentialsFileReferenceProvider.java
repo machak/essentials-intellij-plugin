@@ -16,26 +16,13 @@
 
 package org.onehippo.essentials.intellij.xml;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.UrlPsiReference;
-import com.intellij.psi.impl.smartPointers.SelfElementInfo;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.IdRefReference;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ProcessingContext;
 
 /**
@@ -45,25 +32,14 @@ public class EssentialsFileReferenceProvider extends PsiReferenceProvider {
 
     private static final Logger log = Logger.getInstance("#org.onehippo.essentials.intellij.xml.EssentialsFileReferenceProvider");
 
+
+
     @NotNull
     @Override
-    public PsiReference[] getReferencesByElement(@NotNull final PsiElement element, @NotNull final ProcessingContext processingContext) {
-        // disable for time being
-        if (true) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-        final Module module = ModuleUtilCore.findModuleForPsiElement(element);
-        if (module == null) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-        final GlobalSearchScope moduleScope = module.getModuleContentScope();
-        final Project project = module.getProject();
-        final Collection<VirtualFile> filesByName = FilenameIndex.getAllFilesByExt(project, "ftl", moduleScope);
-        if (filesByName.isEmpty()) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-        final Set<PsiReference> refs = new HashSet<>();
-        // TODO
-        return refs.toArray(new PsiReference[refs.size()]);
+    public PsiReference[] getReferencesByElement(@NotNull final PsiElement psiElement, @NotNull final ProcessingContext processingContext) {
+        final PsiReference[] psiReferences = new PsiReference[1];
+        psiReferences[0] =  new UrlPsiReference(psiElement);
+
+        return psiReferences;
     }
 }
