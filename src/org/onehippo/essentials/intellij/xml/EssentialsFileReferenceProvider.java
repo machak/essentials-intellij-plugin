@@ -22,7 +22,12 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.impl.UrlPsiReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceHelper;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.URLReference;
 import com.intellij.util.ProcessingContext;
 
 /**
@@ -36,10 +41,21 @@ public class EssentialsFileReferenceProvider extends PsiReferenceProvider {
 
     @NotNull
     @Override
-    public PsiReference[] getReferencesByElement(@NotNull final PsiElement psiElement, @NotNull final ProcessingContext processingContext) {
+    public PsiReference[] getReferencesByElement(@NotNull final PsiElement original, @NotNull final ProcessingContext processingContext) {
         final PsiReference[] psiReferences = new PsiReference[1];
-        psiReferences[0] =  new UrlPsiReference(psiElement);
-
+        if (original instanceof PsiMultiReference) {
+            final PsiMultiReference multiReference = (PsiMultiReference) original;
+            for (PsiReference reference : multiReference.getReferences()) {
+                if (reference instanceof FileReference) {
+                    psiReferences[0]  = reference;
+                }
+            }
+        } else if (original instanceof FileReferenceOwner) {
+            final PsiFileReference fileReference = ((FileReferenceOwner) original).getLastFileReference();
+            if (fileReference != null) {
+                psiReferences[0]  = fileReference;
+            }
+        }
         return psiReferences;
     }
 }

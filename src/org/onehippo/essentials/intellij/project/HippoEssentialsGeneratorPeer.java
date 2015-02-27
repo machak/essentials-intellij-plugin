@@ -45,7 +45,7 @@ public class HippoEssentialsGeneratorPeer implements WebProjectGenerator.Generat
     private JTextField vendorName;
     private JCheckBox createRESTClassCheckBox;
     private JTextField packageName;
-    private JComboBox<String> pluginGroup;
+    private JComboBox pluginGroup;
 
 
     public HippoEssentialsGeneratorPeer() {
