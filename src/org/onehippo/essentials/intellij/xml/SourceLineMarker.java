@@ -60,6 +60,7 @@ public class SourceLineMarker implements LineMarkerProvider {
 
     public static final String[] TOOLTIP_OPEN_FILE = new String[]{"Open file"};
     public static final String[] TOOLTIP_NOT_FOUND = new String[]{"File not found"};
+    public static final Language XML = Language.findLanguageByID("xml");
 
     @Override
     public LineMarkerInfo<PsiElement> getLineMarkerInfo(@NotNull PsiElement element) {
@@ -97,8 +98,8 @@ public class SourceLineMarker implements LineMarkerProvider {
         for (VirtualFile sourceRoot : sourceRoots) {
             final VirtualFile targetFile = sourceRoot.findFileByRelativePath(source);
             if (targetFile != null) {
-                PsiFile target = SelfElementInfo.restoreFileFromVirtual(targetFile, module.getProject(), Language.ANY);
-                return MarkerNavigator.create(element, new PsiElement[]{target}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
+                final PsiFile xml = SelfElementInfo.restoreFileFromVirtual(targetFile, module.getProject(), XML);
+                return MarkerNavigator.create(element, new PsiElement[]{xml}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
             }
 
         }
