@@ -17,7 +17,7 @@
 <idea-plugin version="2">
   <id>org.onehippo.essentials.ide.intellij-essentials</id>
   <name>Intellij Essentials plugin and inspections</name>
-  <version>1.0</version>
+  <version>1.2</version>
   <vendor email="info@onehippo.com" url="http://www.onehippo.com">Hippo</vendor>
 
   <description><![CDATA[
@@ -25,6 +25,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+    <p>1.2 Fix source line marker (14.x release)</p>
     <p>1.1 Added project setup and "Create missing instruction file" intention (ALT+ENTER within instruction.xml file) </p>
     <p>1.0 Initial version: inspect plugin descriptor file paths</p>
 
