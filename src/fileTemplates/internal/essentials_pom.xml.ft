@@ -2,8 +2,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-
   <name>${PLUGIN_NAME}</name>
   <description>${PLUGIN_NAME}</description>
   <groupId>${GROUP_ID}</groupId>
@@ -11,49 +9,47 @@
   <version>${VERSION}</version>
   <packaging>jar</packaging>
   <properties>
-    <servlet-api.version>2.5</servlet-api.version>
-    <essentials.version>${ESSENTIALS_VERSION}</essentials.version>
-    <junit.version>4.11</junit.version>
-    <spring-test.version>3.2.6.RELEASE</spring-test.version>
-
+    <essentials.version>2.2.0</essentials.version>
+    <junit.version>4.12</junit.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.onehippo.cms7.essentials.sdk</groupId>
-      <artifactId>api</artifactId>
-      <version>${dollar}{essentials.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.onehippo.cms7.essentials.sdk</groupId>
-      <artifactId>implementation</artifactId>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-essentials-plugin-sdk-api</artifactId>
       <version>${dollar}{essentials.version}</version>
     </dependency>
     <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>${dollar}{servlet-api.version}</version>
-        <scope>provided</scope>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-essentials-plugin-sdk-implementation</artifactId>
+      <version>${dollar}{essentials.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.onehippo.cms7.essentials</groupId>
-      <artifactId>hippo-essentials-plugin-api-implementation</artifactId>
-      <type>test-jar</type>
-      <scope>test</scope>
-      <version>${dollar}{essentials.version}</version>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
-      <version>${dollar}{junit.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <scope>test</scope>
-      <version>${dollar}{spring-test.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -61,7 +57,7 @@
     <resources>
       <resource>
         <filtering>false</filtering>
-        <directory>${dollar}{basedir}/src/main/java</directory>
+        <directory>${basedir}/src/main/java</directory>
         <includes>
           <include>**/*.woff</include>
           <include>**/*.xml</include>
@@ -78,7 +74,7 @@
       </resource>
       <resource>
         <filtering>false</filtering>
-        <directory>${dollar}{basedir}/src/main/resources</directory>
+        <directory>${basedir}/src/main/resources</directory>
         <includes>
           <include>**/*.cnd</include>
           <include>**/*.xml</include>
@@ -107,6 +103,19 @@
         <artifactId>maven-jar-plugin</artifactId>
       </plugin>
     </plugins>
-
   </build>
+  <repositories>
+    <repository>
+      <id>hippo</id>
+      <name>Hippo Maven 2</name>
+      <url>https://maven.onehippo.com/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </repository>
+  </repositories>
+
 </project>

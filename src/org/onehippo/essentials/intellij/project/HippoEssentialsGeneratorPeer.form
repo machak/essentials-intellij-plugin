@@ -83,7 +83,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="1.00.00-SNAPSHOT"/>
+              <text value="1.0.0-SNAPSHOT"/>
             </properties>
           </component>
           <component id="7a543" class="javax.swing.JTextField" binding="artifactId">
@@ -162,10 +162,8 @@
             </constraints>
             <properties>
               <model>
-                <item value=""/>
-                <item value="features"/>
-                <item value="tools"/>
-                <item value="instructionPackage"/>
+                <item value="feature"/>
+                <item value="tool"/>
               </model>
             </properties>
           </component>
