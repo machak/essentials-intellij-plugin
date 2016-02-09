@@ -77,8 +77,8 @@ public class HippoTemplatesFactory implements FileTemplateGroupDescriptorFactory
 
     public static PsiElement createFileFromTemplate(PsiElement directory, final SettingsData data, String fileName, HippoTemplate template) {
         String myFileName = fileName;
-        final FileTemplate fileTemplate = FileTemplateManager.getInstance().getInternalTemplate(template.getName());
-        final Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
+        final FileTemplate fileTemplate = FileTemplateManager.getDefaultInstance().getInternalTemplate(template.getName());
+        final Properties properties = new Properties(FileTemplateManager.getDefaultInstance().getDefaultProperties());
         final String projectName = data.getProjectName();
         final String projectNameCapitalized = Character.toUpperCase(projectName.charAt(0)) + projectName.substring(1);
         properties.setProperty("PLUGIN_NAME_CAPITALIZED", projectNameCapitalized);

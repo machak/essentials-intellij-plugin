@@ -31,6 +31,7 @@ import com.intellij.lang.Language;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -95,10 +96,11 @@ public class SourceLineMarker implements LineMarkerProvider {
 
         final PsiFile psiFile = element.getContainingFile();
         final VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
+        final Project project = module.getProject();
         for (VirtualFile sourceRoot : sourceRoots) {
             final VirtualFile targetFile = sourceRoot.findFileByRelativePath(source);
             if (targetFile != null) {
-                final PsiFile xml = SelfElementInfo.restoreFileFromVirtual(targetFile, module.getProject(), XML);
+                final PsiFile xml = SelfElementInfo.restoreFileFromVirtual(targetFile, project, XML);
                 return MarkerNavigator.create(element, new PsiElement[]{xml}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
             }
 
