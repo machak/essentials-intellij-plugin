@@ -59,7 +59,7 @@ public class EssentialsFileReferenceProvider extends PsiReferenceProvider {
     public PsiReference[] getReferencesByElement(@NotNull final PsiElement original, @NotNull final ProcessingContext processingContext) {
         if (original instanceof XmlAttributeValue) {
             final String value = ((XmlAttributeValue)original).getValue();
-            if (Strings.isNullOrEmpty(value)) {
+            if (Strings.isEmptyOrNull(value)) {
                 return EMPTY_REFS;
             }
             final Module module = ModuleUtilCore.findModuleForPsiElement(original);
