@@ -41,7 +41,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
 
-    <completion.contributor language="XML" id="essentialsXmlContributor"  implementationClass="org.onehippo.essentials.intellij.xml.code.FileReferenceContributor"/>
+    <completion.contributor language="XML" id="essentialsXmlContributor" implementationClass="org.onehippo.essentials.intellij.xml.code.FileReferenceContributor"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="org.onehippo.essentials.intellij.xml.SourceLineMarker"/>
     <psi.referenceContributor language="XML" implementation="org.onehippo.essentials.intellij.xml.EssentialsTagsContributor"/>
     <intentionAction>
@@ -75,9 +75,17 @@
     <!-- Add your project components here -->
   </project-components>
 
-  <actions>
-    <!-- Add your actions here -->
+<!--
+<actions>
+    <group id="Essentials">
+      <action id="org.onehippo.essentials.intellij.actions.AddInstructionAction"
+              class="org.onehippo.essentials.intellij.actions.AddInstructionAction"
+              text="Add file to essentials instructions"
+              description="Add file to essentials instructions XML file"/>
+      <add-to-group group-id="MainMenu" relative-to-action="ToolsMenu" anchor="after"/>
+    </group>
 
   </actions>
+  -->
 
 </idea-plugin>

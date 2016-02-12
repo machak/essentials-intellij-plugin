@@ -26,7 +26,6 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.lang.Language;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.roots.ContentIterator;
@@ -41,6 +40,7 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.vcsUtil.VcsFileUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.onehippo.essentials.intellij.util.Const;
 
 public class FileReferenceContributor extends CompletionContributor {
 
@@ -61,8 +61,12 @@ public class FileReferenceContributor extends CompletionContributor {
                             final XmlAttribute attribute = (XmlAttribute)element.getParent();
                             final String name = attribute.getName();
                             if (!name.equals("source") && !name.equals("template")) {
+                                if (name.equals("target")) {
+                                    resultSet.addAllElements(Const.PLACEHOLDER_SET);
+                                }
                                 return;
                             }
+
                             final Module module = ModuleUtilCore.findModuleForPsiElement(element);
                             if (module == null) {
                                 return;
@@ -74,9 +78,7 @@ public class FileReferenceContributor extends CompletionContributor {
                                 if (sourceRoot.getName().equals("resources")) {
                                     final VirtualFile[] children = sourceRoot.getChildren();
                                     for (VirtualFile child : children) {
-
                                         if (!child.getName().equals("META-INF")) {
-
                                             idx.iterateContentUnderDirectory(child, new ContentIterator() {
                                                 @Override
                                                 public boolean processFile(final VirtualFile file) {
@@ -84,7 +86,6 @@ public class FileReferenceContributor extends CompletionContributor {
                                                         return true;
                                                     }
                                                     final String path = VcsFileUtil.relativePath(module.getModuleFile(), file);
-
                                                     resultSet.addElement(LookupElementBuilder.create(PATH.matcher(path).replaceAll(Matcher.quoteReplacement(""))));
                                                     return true;
                                                 }
@@ -92,14 +93,12 @@ public class FileReferenceContributor extends CompletionContributor {
                                         }
                                     }
                                 }
-
                             }
 
                         }
                     }
-
-
                 }
         );
+
     }
 }
