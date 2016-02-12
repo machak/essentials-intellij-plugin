@@ -17,7 +17,7 @@
 <idea-plugin version="2">
   <id>org.onehippo.essentials.ide.intellij-essentials</id>
   <name>Intellij Essentials project setup</name>
-  <version>1.4</version>
+  <version>1.5</version>
   <vendor email="info@onehippo.com" url="http://www.onehippo.com">Hippo</vendor>
 
   <description><![CDATA[
@@ -25,7 +25,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
-    <p>1.4 Add target placeholders autocompletion
+    <p>1.5 Add target placeholders autocompletion for other files within resources folder</p>
+    <p>1.4 Add target placeholders autocompletion</p>
     <p>1.3 Update pom to use 10.02 as parent pom</p>
     ]]>
   </change-notes>
