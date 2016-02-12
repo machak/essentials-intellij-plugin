@@ -70,7 +70,6 @@ public final class Const {
     public static final String PLACEHOLDER_CURRENT_YEAR = "{{currentYear}}";
     public static final String PLACEHOLDER_CURRENT_MONTH = "{{currentMonth}}";
 
-    // LookupElementBuilder.create(PATH.matcher(path).replaceAll(Matcher.quoteReplacement("")))
     public static final Set<LookupElement> PLACEHOLDER_SET = new ImmutableSet.Builder<LookupElement>()
 
             .add(LookupElementBuilder.create(PLACEHOLDER_NAMESPACE))
@@ -117,6 +116,12 @@ public final class Const {
             .add(LookupElementBuilder.create(PLACEHOLDER_JCR_DATE_NEXT_YEAR))
             .add(LookupElementBuilder.create(PLACEHOLDER_CURRENT_YEAR))
             .add(LookupElementBuilder.create(PLACEHOLDER_CURRENT_MONTH))
+
+            .build();
+
+    public static final Set<LookupElement> PLACEHOLDER_SET_ALL = new ImmutableSet.Builder<LookupElement>()
+
+            .addAll(PLACEHOLDER_SET)
             .add(LookupElementBuilder.create("/hst:hst/hst:configurations/hst:default/hst:catalog/essentials-catalog"))
             .add(LookupElementBuilder.create("/hippo:configuration/hippo:queries/hippo:templates"))
             .add(LookupElementBuilder.create("/hippo:namespaces/"))
@@ -130,6 +135,8 @@ public final class Const {
             .add(LookupElementBuilder.create("{{freemarkerRoot}}/{{namespace}}/"))
 
             .build();
+
+
 
 
     private Const() {

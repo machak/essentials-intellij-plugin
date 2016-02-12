@@ -62,7 +62,7 @@ public class FileReferenceContributor extends CompletionContributor {
                             final String name = attribute.getName();
                             if (!name.equals("source") && !name.equals("template")) {
                                 if (name.equals("target")) {
-                                    resultSet.addAllElements(Const.PLACEHOLDER_SET);
+                                    resultSet.addAllElements(Const.PLACEHOLDER_SET_ALL);
                                 }
                                 return;
                             }

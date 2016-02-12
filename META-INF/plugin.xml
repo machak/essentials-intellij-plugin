@@ -43,6 +43,7 @@
   <extensions defaultExtensionNs="com.intellij">
 
     <completion.contributor language="XML" id="essentialsXmlContributor" implementationClass="org.onehippo.essentials.intellij.xml.code.FileReferenceContributor"/>
+    <completion.contributor language="any" id="essentialsPlaceholderAny" implementationClass="org.onehippo.essentials.intellij.xml.code.PlaceholdersContributor"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="org.onehippo.essentials.intellij.xml.SourceLineMarker"/>
     <psi.referenceContributor language="XML" implementation="org.onehippo.essentials.intellij.xml.EssentialsTagsContributor"/>
     <intentionAction>

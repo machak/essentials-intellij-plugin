@@ -16,11 +16,6 @@
 
 package org.onehippo.essentials.intellij.actions;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.intellij.conversion.CannotConvertException;
-import com.intellij.execution.CantRunException;
-import com.intellij.javaee.model.xml.web.WebApp;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
@@ -28,31 +23,13 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentIterator;
-import com.intellij.openapi.roots.FileIndex;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.controlFlow.Instruction;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.xml.XmlDocument;
-import com.intellij.psi.xml.XmlFile;
-import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.indexing.FileContentImpl;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomFileDescription;
 import com.intellij.util.xml.DomManager;
-import com.intellij.util.xml.ModelMerger;
 
-import org.onehippo.essentials.intellij.xml.model.InstructionSet;
-import org.onehippo.essentials.intellij.xml.model.Instructions;
-
-import static com.intellij.icons.AllIcons.Nodes.Servlet;
+import org.onehippo.essentials.intellij.util.Util;
 
 public class AddInstructionAction extends AnAction {
 
@@ -69,7 +46,7 @@ public class AddInstructionAction extends AnAction {
                 final VirtualFile file = (VirtualFile)data;
                 final Module module = ModuleUtilCore.findModuleForFile(file, project);
                 if (module != null) {
-                    final VirtualFile instructionFile = findInstructionFile(module).file;
+                    final VirtualFile instructionFile = Util.findInstructionFile(module).file;
                     if (instructionFile != null) {
                         System.out.println("instructionFile = " + instructionFile);
                         final DomManager manager = DomManager.getDomManager(project);
@@ -90,72 +67,10 @@ public class AddInstructionAction extends AnAction {
         }
     }
 
-    private Wrap findInstructionFile(final Module module) {
-        final ModuleRootManager manager = ModuleRootManager.getInstance(module);
-        final FileIndex idx = manager.getFileIndex();
-        final VirtualFile[] sourceRoots = manager.getSourceRoots();
-        final Wrap wrap = new Wrap(null);
-        for (VirtualFile sourceRoot : sourceRoots) {
-            if (wrap.found()) {
-                return wrap;
-            }
-            if (sourceRoot.getName().equals("resources")) {
-                final VirtualFile[] children = sourceRoot.getChildren();
-
-                for (VirtualFile child : children) {
-                    if (wrap.found()) {
-                        return wrap;
-                    }
-                    idx.iterateContentUnderDirectory(child, new ContentIterator() {
-                        @Override
-                        public boolean processFile(final VirtualFile file) {
-                            if (wrap.found()) {
-                                return false;
-                            }
-                            if (file.isDirectory()) {
-                                return true;
-                            }
-                            if (file.getFileType() == StdFileTypes.XML) {
-                                final PsiFile psiFile = PsiUtilCore.getPsiFile(module.getProject(), file);
-                                if (psiFile instanceof XmlFile) {
-                                    final XmlDocument document = ((XmlFile)psiFile).getDocument();
-
-                                    if (document != null) {
-                                        final XmlTag rootTag = document.getRootTag();
-                                        final String namespace = rootTag != null ? rootTag.getNamespace() : null;
-                                        if (!Strings.isNullOrEmpty(namespace) && namespace.equals("http://www.onehippo.org/essentials/instructions")) {
-                                            wrap.file = file;
-                                            return false;
-                                        }
-                                    }
-                                }
-                            }
-                            return true;
-                        }
-                    });
-                }
-            }
-        }
-        return wrap;
-    }
-
-
-
 
     private void showError(final Project project, final String message) {
         final Notification notification = ERROR_GROUP.createNotification("Hippo Essentials", message, NotificationType.ERROR, null);
         notification.notify(project);
     }
 
-    private static class Wrap {
-        public Wrap(final VirtualFile file) {
-            this.file = file;
-        }
-
-        public VirtualFile file;
-
-        public boolean found() {
-            return file != null;
-        }
-    }
 }
