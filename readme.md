@@ -1,3 +1,3 @@
-### Hippo Essentials Project plugin
-File > New > Project...> Hippo > Essentials Plugin Setup
+### Hippo Essentials Autocomplete and instructions validation support  
+
 
