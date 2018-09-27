@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
+import org.fest.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.ImmutableSet;
@@ -38,21 +39,19 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.smartPointers.SelfElementInfo;
+import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 
-/**
- * @version "$Id$"
- */
 public class SourceLineMarker implements LineMarkerProvider {
 
 
     public static final String NS = "http://www.onehippo.org/essentials/instructions";
     private static final Logger log = Logger.getInstance("#org.onehippo.essentials.intellij.xml.SourceLineMarker");
 
-    private static final Icon REFERENCE_OK = IconLoader.getIcon("/essentials_ok_reference.png");
-    private static final Icon REFERENCE_ERROR = IconLoader.getIcon("/essentials_reference_error.png");
+    private static final Icon REFERENCE_OK = IconLoader.getIcon("/icons/essentials_ok_reference.png");
+    private static final Icon REFERENCE_ERROR = IconLoader.getIcon("/icons/essentials_reference_error.png");
 
-    public static final Set<String> OUR_TAGS =  new ImmutableSet.Builder<String>()
+    public static final Set<String> OUR_TAGS = new ImmutableSet.Builder<String>()
             .add("file")
             .add("xml")
             .add("folder")
@@ -61,33 +60,32 @@ public class SourceLineMarker implements LineMarkerProvider {
 
     public static final String[] TOOLTIP_OPEN_FILE = new String[]{"Open file"};
     public static final String[] TOOLTIP_NOT_FOUND = new String[]{"File not found"};
-    public static final Language XML = Language.findLanguageByID("xml");
+
 
     @Override
-    public LineMarkerInfo<PsiElement> getLineMarkerInfo(@NotNull PsiElement element) {
+    public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
 
-        if (!(element instanceof XmlTag)) {
+        if (!(element instanceof XmlAttribute)) {
             return null;
         }
 
-        final XmlTag xmlTag = (XmlTag) element;
-        final String tagName = xmlTag.getLocalName();
-        if (!OUR_TAGS.contains(tagName)) {
+        final XmlAttribute xmlAttribute = (XmlAttribute) element;
+        final PsiElement markerTarget = xmlAttribute.getPrevSibling();
+        final String attributeName = xmlAttribute.getLocalName();
+        if (!"source".equals(attributeName)) {
             return null;
         }
 
+        final String sourcePath = xmlAttribute.getValue();
+        if (Strings.isNullOrEmpty(sourcePath)) {
 
-        final String namespace = xmlTag.getNamespace();
+            return null;
+        }
+
+        final String namespace = xmlAttribute.getParent().getNamespace();
         if (!NS.equals(namespace)) {
             return null;
         }
-
-
-        final String source = tagName.equals("folder") ? xmlTag.getAttributeValue("template"):xmlTag.getAttributeValue("source");
-        if (source == null) {
-            return null;
-        }
-
 
         final Module module = ModuleUtilCore.findModuleForPsiElement(element);
         if (module == null) {
@@ -98,14 +96,17 @@ public class SourceLineMarker implements LineMarkerProvider {
         final VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
         final Project project = module.getProject();
         for (VirtualFile sourceRoot : sourceRoots) {
-            final VirtualFile targetFile = sourceRoot.findFileByRelativePath(source);
+            final VirtualFile targetFile = sourceRoot.findFileByRelativePath(sourcePath);
             if (targetFile != null) {
-                final PsiFile xml = SelfElementInfo.restoreFileFromVirtual(targetFile, project, XML);
-                return MarkerNavigator.create(element, new PsiElement[]{xml}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
+                final PsiFile xml = SelfElementInfo.restoreFileFromVirtual(targetFile, project, Language.ANY);
+                if (element instanceof XmlTag) {
+                    return null;
+                }
+                return MarkerNavigator.create(markerTarget, new PsiElement[]{xml}, REFERENCE_OK, TOOLTIP_OPEN_FILE);
             }
 
         }
-        return MarkerNavigator.create(element, new PsiElement[]{psiFile}, REFERENCE_ERROR, TOOLTIP_NOT_FOUND);
+        return MarkerNavigator.create(markerTarget, new PsiElement[]{psiFile}, REFERENCE_ERROR, TOOLTIP_NOT_FOUND);
 
 
     }

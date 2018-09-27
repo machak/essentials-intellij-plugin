@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2015-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ package org.onehippo.essentials.intellij.xml.code;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jetbrains.annotations.NotNull;
+import org.onehippo.essentials.intellij.util.Const;
+
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -28,7 +31,6 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.roots.FileIndex;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -39,18 +41,15 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
 import com.intellij.vcsUtil.VcsFileUtil;
 
-import org.jetbrains.annotations.NotNull;
-import org.onehippo.essentials.intellij.util.Const;
-
 public class FileReferenceContributor extends CompletionContributor {
 
-    private static final Pattern PATH = Pattern.compile("src/main/resources/", Pattern.LITERAL);
+    private static final Pattern PATH = Pattern.compile("../src/main/resources/", Pattern.LITERAL);
 
     public FileReferenceContributor() {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
+                                               @NotNull ProcessingContext context,
                                                @NotNull final CompletionResultSet resultSet) {
                         final PsiElement position = parameters.getPosition();
                         if (position.getContext() == null) {
@@ -79,16 +78,17 @@ public class FileReferenceContributor extends CompletionContributor {
                                     final VirtualFile[] children = sourceRoot.getChildren();
                                     for (VirtualFile child : children) {
                                         if (!child.getName().equals("META-INF")) {
-                                            idx.iterateContentUnderDirectory(child, new ContentIterator() {
-                                                @Override
-                                                public boolean processFile(final VirtualFile file) {
-                                                    if (file.isDirectory()) {
-                                                        return true;
-                                                    }
-                                                    final String path = VcsFileUtil.relativePath(module.getModuleFile(), file);
-                                                    resultSet.addElement(LookupElementBuilder.create(PATH.matcher(path).replaceAll(Matcher.quoteReplacement(""))));
+                                            idx.iterateContentUnderDirectory(child, file -> {
+                                                if (file.isDirectory()) {
                                                     return true;
                                                 }
+                                                final VirtualFile moduleFile = module.getModuleFile();
+                                                if (moduleFile == null) {
+                                                    return false;
+                                                }
+                                                final String path = VcsFileUtil.relativePath(moduleFile, file);
+                                                resultSet.addElement(LookupElementBuilder.create(PATH.matcher(path).replaceAll(Matcher.quoteReplacement(""))));
+                                                return true;
                                             });
                                         }
                                     }

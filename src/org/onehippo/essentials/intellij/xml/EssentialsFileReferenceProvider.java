@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,34 +18,21 @@ package org.onehippo.essentials.intellij.xml;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.intellij.lang.Language;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.impl.smartPointers.SelfElementInfo;
-import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceHelper;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceUtil;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.URLReference;
 import com.intellij.psi.search.scope.packageSet.PackageSetBase;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.refactoring.move.FileReferenceContextUtil;
 import com.intellij.util.ProcessingContext;
 import com.yourkit.util.Strings;
-
-import static org.onehippo.essentials.intellij.xml.SourceLineMarker.TOOLTIP_NOT_FOUND;
-import static org.onehippo.essentials.intellij.xml.SourceLineMarker.TOOLTIP_OPEN_FILE;
 
 public class EssentialsFileReferenceProvider extends PsiReferenceProvider {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceRegistrar;
 
-import static com.intellij.patterns.DomPatterns.domElement;
 import static com.intellij.patterns.XmlPatterns.xmlAttributeValue;
 
-
-/**
- * @version "$Id$"
- */
 public class EssentialsTagsContributor extends PsiReferenceContributor {
     private static final Logger log = Logger.getInstance("#org.onehippo.essentials.intellij.xml.EssentialsTagsContributor");
 
@@ -42,11 +37,7 @@ public class EssentialsTagsContributor extends PsiReferenceContributor {
 
     private void registerSourceCompletion(final PsiReferenceRegistrar registrar) {
 
-        registrar.registerReferenceProvider(
-
-                xmlAttributeValue().withLocalName("source"),
-                //.withParent(withDom(domElement(XmlInstruction.class))),
-                new EssentialsFileReferenceProvider());
+        registrar.registerReferenceProvider(xmlAttributeValue().withLocalName("source"), new EssentialsFileReferenceProvider());
 
     }
 

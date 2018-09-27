@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2016-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@ package org.onehippo.essentials.intellij.xml.code;
 
 import java.util.regex.Pattern;
 
+import org.jetbrains.annotations.NotNull;
+import org.onehippo.essentials.intellij.util.Const;
+import org.onehippo.essentials.intellij.util.Util;
+
 import com.google.common.base.Strings;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -36,10 +40,6 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ProcessingContext;
 
-import org.jetbrains.annotations.NotNull;
-import org.onehippo.essentials.intellij.util.Const;
-import org.onehippo.essentials.intellij.util.Util;
-
 public class PlaceholdersContributor extends CompletionContributor {
 
     private static final Pattern PATH = Pattern.compile("src/main/resources/", Pattern.LITERAL);
@@ -48,7 +48,7 @@ public class PlaceholdersContributor extends CompletionContributor {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
+                                               @NotNull ProcessingContext context,
                                                @NotNull final CompletionResultSet resultSet) {
                         final PsiElement position = parameters.getPosition();
                         if (position.getContext() == null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Hippo B.V. (http://www.onehippo.com)
+ * Copyright 2014-2018 Hippo B.V. (http://www.onehippo.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.IncorrectOperationException;
 
-/**
- * @version "$Id$"
- */
+
 public class CreateFileIntention extends PsiElementBaseIntentionAction {
 
     private static final Logger log = Logger.getInstance("#org.onehippo.essentials.intellij.xml.intentions.CreateFileIntention");
@@ -73,7 +71,6 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
         for (VirtualFile sourceRoot : sourceRoots) {
             ourResource = sourceRoot;
             if (sourceRoot.getName().equals("resources")) {
-                ourResource = sourceRoot;
                 break;
             }
 
@@ -85,27 +82,22 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
         final String filePath = ourResource.getCanonicalPath() + File.separator + fileName;
 
         final Application application = ApplicationManager.getApplication();
-        application.runWriteAction(new Runnable() {
-            @Override
-            public void run() {
+        application.runWriteAction(() -> {
 
-                try {
-                    FileUtil.createIfDoesntExist(new File(filePath));
-                } finally {
+            try {
+                FileUtil.createIfDoesntExist(new File(filePath));
+            } finally {
 
-                    application.invokeLater(new Runnable() {@Override
-                        public void run() {
-                            final VirtualFile file = VirtualFileManager.getInstance().refreshAndFindFileByUrl("file://"+filePath);
-                            if (file != null) {
-                                final OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(project, file);
-                                FileEditorManager.getInstance(project).openTextEditor(openFileDescriptor, true);
-                            }
+                application.invokeLater(() -> {
+                    final VirtualFile file = VirtualFileManager.getInstance().refreshAndFindFileByUrl("file://" + filePath);
+                    if (file != null) {
+                        final OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(project, file);
+                        FileEditorManager.getInstance(project).openTextEditor(openFileDescriptor, true);
+                    }
 
-                        }
                     });
-                }
-
             }
+
         });
     }
 
@@ -169,14 +161,11 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
             return false;
         }
         final String tagName = ourParent.getLocalName();
-        if (!SourceLineMarker.OUR_TAGS.contains(tagName)) {
+        if (!SourceLineMarker.OUR_ATTRIBUTES.contains(tagName)) {
             return false;
         }
         final String source = attribute.getValue();
-        if (Strings.isNullOrEmpty(source)) {
-            return false;
-        }
-        return true;
+        return !Strings.isNullOrEmpty(source);
     }
 
     @NotNull
