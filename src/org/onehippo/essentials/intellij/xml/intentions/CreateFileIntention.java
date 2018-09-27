@@ -161,7 +161,7 @@ public class CreateFileIntention extends PsiElementBaseIntentionAction {
             return false;
         }
         final String tagName = ourParent.getLocalName();
-        if (!SourceLineMarker.OUR_ATTRIBUTES.contains(tagName)) {
+        if (!SourceLineMarker.OUR_TAGS.contains(tagName)) {
             return false;
         }
         final String source = attribute.getValue();
