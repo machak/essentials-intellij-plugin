@@ -67,6 +67,9 @@ public class FileReferenceContributor extends CompletionContributor {
                                     case "overwrite":
                                         resultSet.addAllElements(Const.ATTR_TRUE_FALSE);
                                         break;
+                                    case "binary":
+                                        resultSet.addAllElements(Const.ATTR_TRUE_FALSE);
+                                        break;
                                     case "action":
                                         resultSet.addAllElements(Const.ATTR_ACTION);
                                         break;
