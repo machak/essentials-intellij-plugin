@@ -119,6 +119,14 @@ public final class Const {
     public static final Set<LookupElement> ATTR_EXEC = new ImmutableSet.Builder<LookupElement>()
             .add(LookupElementBuilder.create("class"))
             .build();
+    public static final Set<LookupElement> ATTR_TRUE_FALSE = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("true"))
+            .add(LookupElementBuilder.create("false"))
+            .build();
+    public static final Set<LookupElement> ATTR_ACTION = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("copy"))
+            .add(LookupElementBuilder.create("delete"))
+            .build();
 
     public static final Set<LookupElement> PLACEHOLDER_SET = new ImmutableSet.Builder<LookupElement>()
 

@@ -57,11 +57,19 @@ public class FileReferenceContributor extends CompletionContributor {
                         }
                         final PsiElement element = position.getContext().getOriginalElement();
                         if (element instanceof XmlAttributeValue) {
-                            final XmlAttribute attribute = (XmlAttribute)element.getParent();
+                            final XmlAttribute attribute = (XmlAttribute) element.getParent();
                             final String name = attribute.getName();
                             if (!name.equals("source") && !name.equals("template")) {
-                                if (name.equals("target")) {
-                                    resultSet.addAllElements(Const.PLACEHOLDER_SET_ALL);
+                                switch (name) {
+                                    case "target":
+                                        resultSet.addAllElements(Const.PLACEHOLDER_SET_ALL);
+                                        break;
+                                    case "overwrite":
+                                        resultSet.addAllElements(Const.ATTR_TRUE_FALSE);
+                                        break;
+                                    case "action":
+                                        resultSet.addAllElements(Const.ATTR_ACTION);
+                                        break;
                                 }
                                 return;
                             }
