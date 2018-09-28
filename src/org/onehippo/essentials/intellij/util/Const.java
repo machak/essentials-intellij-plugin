@@ -70,6 +70,56 @@ public final class Const {
     public static final String WEBFILES_PREFIX = "webfilesPrefix";
     public static final String ESSENTIALS_ROOT = "essentialsRoot";
 
+    public static final String TAG_FILE = "file";
+    public static final String TAG_FREEMARKER = "freemarker";
+    public static final String TAG_DIRECTORY = "directory";
+    public static final String TAG_EXECUTE = "execute";
+    public static final String TAG_XML = "xml";
+    public static final String TAG_TRANSLATIONS = "translations";
+    public static final String TAG_CND = "cnd";
+    public static final String TAG_HST_BEAN_CLASSES = "hstBeanClasses";
+    public static final String TAG_MAVEN_DEPENDENCY = "mavenDependency";
+    public static final Set<LookupElement> TAG_NAMES = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create(TAG_FILE))
+            .add(LookupElementBuilder.create(TAG_FREEMARKER))
+            .add(LookupElementBuilder.create(TAG_DIRECTORY))
+            .add(LookupElementBuilder.create(TAG_EXECUTE))
+            .add(LookupElementBuilder.create(TAG_XML))
+            .add(LookupElementBuilder.create(TAG_TRANSLATIONS))
+            .add(LookupElementBuilder.create(TAG_CND))
+            .add(LookupElementBuilder.create(TAG_HST_BEAN_CLASSES))
+            .add(LookupElementBuilder.create(TAG_MAVEN_DEPENDENCY))
+            .build();
+    public static final Set<LookupElement> ATTR_XML_FREEMARKER_FILE = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("action"))
+            .add(LookupElementBuilder.create("source"))
+            .add(LookupElementBuilder.create("target"))
+            .add(LookupElementBuilder.create("binary"))
+            .add(LookupElementBuilder.create("overwrite"))
+            .build();
+    public static final Set<LookupElement> ATTR_BEANS = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("pattern"))
+            .build();
+    public static final Set<LookupElement> ATTR_CND = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("documentType"))
+            .add(LookupElementBuilder.create("superType"))
+            .add(LookupElementBuilder.create("namespaceUrl"))
+            .build();
+    public static final Set<LookupElement> ATTR_MAVEN = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("targetPom"))
+            .add(LookupElementBuilder.create("groupId"))
+            .add(LookupElementBuilder.create("artifactId"))
+            .add(LookupElementBuilder.create("version"))
+            .add(LookupElementBuilder.create("scope"))
+            .add(LookupElementBuilder.create("type"))
+            .build();
+    public static final Set<LookupElement> ATTR_TRANSLATION = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("source"))
+            .build();
+    public static final Set<LookupElement> ATTR_EXEC = new ImmutableSet.Builder<LookupElement>()
+            .add(LookupElementBuilder.create("class"))
+            .build();
+
     public static final Set<LookupElement> PLACEHOLDER_SET = new ImmutableSet.Builder<LookupElement>()
 
             .add(LookupElementBuilder.create(NAMESPACE))
@@ -131,8 +181,7 @@ public final class Const {
             .add(LookupElementBuilder.create("{{freemarkerRoot}}/{{namespace}}/"))
 
             .build();
-
-
+    public static final String TAG_INSTRUCTION_SET = "instructionSet";
 
 
     private Const() {
