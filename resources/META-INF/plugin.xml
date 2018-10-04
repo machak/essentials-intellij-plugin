@@ -17,7 +17,7 @@
 <idea-plugin>
   <id>org.onehippo.essentials.ide.intellij-essentials</id>
   <name>Intellij Essentials Instruction Files</name>
-  <version>1.7</version>
+  <version>1.8</version>
   <vendor email="info@onehippo.com" url="http://www.onehippo.com">Hippo</vendor>
 
   <description><![CDATA[
@@ -25,6 +25,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+    <p>1.8 Bug fixes
     <p>1.7 Add tag autocompletion
     <p>1.6 Cleanup and bug fixes
     <p>1.5 Add target placeholders autocompletion for other files within resources folder</p>

@@ -22,9 +22,9 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
-import org.fest.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
@@ -78,7 +78,6 @@ public class SourceLineMarker implements LineMarkerProvider {
 
         final String sourcePath = xmlAttribute.getValue();
         if (Strings.isNullOrEmpty(sourcePath)) {
-
             return null;
         }
 

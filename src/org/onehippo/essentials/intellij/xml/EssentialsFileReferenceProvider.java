@@ -18,6 +18,7 @@ package org.onehippo.essentials.intellij.xml;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.common.base.Strings;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -32,7 +33,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.search.scope.packageSet.PackageSetBase;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
-import com.yourkit.util.Strings;
+
 
 public class EssentialsFileReferenceProvider extends PsiReferenceProvider {
 
