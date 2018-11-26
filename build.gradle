@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.3.12'
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+group 'org.onehippo.essentials.ide.intellij-essentials'
+version '1.8-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/jetbrains/intellij-plugin-service' }
+}
+
+
+patchPluginXml {
+    sinceBuild '100'
+    untilBuild '184'
+}
+
+intellij {
+    version '2018.3'
+    pluginName 'essentials-intellij-plugin'
+}
